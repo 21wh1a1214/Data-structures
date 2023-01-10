@@ -1,0 +1,93 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define max 6
+int Q[max],front = -1, rear = -1;
+void Enqueue(int);
+int dequeue();
+void display();
+int isfull();
+int isempty();
+void main()
+{
+    int ch;
+    while(1)
+    {
+        printf("1.Insert\n2.Delete\n3.Display\n4.Exit\n");
+        printf("Enter your option : ");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1 : printf("Enter data : ");
+                     int p;
+                     scanf("%d",&p);
+                     Enqueue(p);
+                     break;
+            case 2 : printf("Data deleted : %d",dequeue());
+                     break;
+            case 3 : display();
+                     break;
+            case 4 : exit(0);
+                     break;
+
+        }
+    }
+}
+nt isfull()
+{
+    if( rear == max -1)
+    {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+
+}
+int isempty()
+{
+    if (front == -1 && rear == -1)
+        return 1;
+    else
+        return 0;
+}
+void Enqueue(int n)
+{
+    if(isfull())
+    {
+        printf("Queue is filled\n");
+    }
+    else{
+        Q[++rear] = n;
+        if(front == -1)
+        {
+            front++;
+        }
+    }
+}
+int dequeue()
+{
+    if(isempty())
+    {
+        printf("The queue is empty");
+    }
+    else if( rear == front)
+    {
+        int x = Q[rear];
+        rear = front = -1;
+        return x;
+    }
+    else{
+        int x = Q[front];
+            front++;
+            return x;
+    }
+
+}
+void display()
+{
+    int i;
+    for(i=front;i<=rear;i++)
+    {
+        printf("%3d",Q[i]);
+    }
+}
