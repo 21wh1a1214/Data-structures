@@ -1,0 +1,134 @@
+include<stdio.h>
+#include<stdlib.h>
+struct node{
+        int key;
+        struct node *right;
+        struct node *left;
+}node;
+struct node *root = NULL;
+struct node *getnode(int key){
+
+        struct node *new=(struct node *)malloc(sizeof(struct node));
+
+                new->key=key;
+                new->right=NULL;
+                new->left=NULL;
+                return new;
+}
+struct node *search(struct node *root, int key){
+        if((root==NULL)||(root->key==key)){
+                return root;
+        }
+        else if(key<root->key){
+                return search(root->left,key);
+        }
+        else if(key>root->key){
+                return search(root->right,key);
+        }
+        else{
+                printf("\nunsuccessful search");
+        }
+}
+struct node *insert(struct node *node, int key){
+        if(node==NULL){
+                struct node *new = getnode(key);
+                node=new;
+        }
+        else if(key<node->key){
+                node->left=insert(node->left,key);
+        }
+        else if(key>node->key){
+                node->right=insert(node->right,key);
+        }
+        /*else{
+                printf("\ninsertion not possible");
+        }*/
+        return node;
+}
+struct node *getmax(struct node *node){
+        while(node->right!=NULL){
+                node=node->right;
+                return node;
+        }
+}
+struct node *getmin(struct node *node){
+        while(node->left!=NULL){
+                node=node->left;
+                return node;
+        }
+}
+struct node *delete(struct node *node, int key){
+        if(node==NULL){
+                return NULL;
+        }
+        else if(key<node->key){
+                node->left=delete(node->left,key);
+        }
+        else if(key>node->key){
+                node->right=delete(node->right,key);
+        }
+        else if(node->left==NULL){
+                struct node *temp=node->right;
+                free(node);
+                return temp;
+        }
+        else if(node->right==NULL){
+                struct node *temp=node->left;
+                free(node);
+                return temp;
+        }
+        else{
+                struct node *min=getmin(node->right);
+                node->key=min->key;
+                node->right=delete(node->right,min->key);
+        }
+        return node;
+}
+void inorder(struct node *root)
+{
+    if(root!=NULL)
+    {
+        inorder(root->left);
+        printf(" %d ", root->key);
+        inorder(root->right);
+    }
+}
+
+int main()
+{       int ch,key,i,r;
+        struct node *s;
+        while(1){
+                printf("1.INSERT\n2.DELETE\n3.SEARCH\n4.inorder\n5.exit\n");
+                printf("EnTER THE choicee : ");
+                scanf("%d",&ch);
+                switch(ch){
+                         case 1:printf("\n Enter Key ");
+                                scanf("%d",&key);
+                                if(root==NULL)
+                                root=insert(root,key);
+                                insert(root,key);
+                                printf("\n The TREE After insertion \n");
+                                inorder(root);
+                               break;
+                         case 2:
+                               printf("enter key to delete : ");
+                               scanf("%d",&key);
+                               delete(root,key);
+                               printf("\n The TREE After deletion \n");
+                                inorder(root);
+
+                               break;
+                        case 3 :printf("enter key to search : ");
+                               scanf("%d",&key);
+                               s=search(root,key);
+                               if(s==NULL)
+                                       printf("\nKey Not Found ");
+                               else
+                                       printf("\nkey found");
+                                break;
+                        case 4:inorder(root);
+                               break;
+                        case 5:exit(0);
+                }
+        }
+}
